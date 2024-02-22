@@ -12,6 +12,10 @@ class Section(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = 'Раздел'
+        verbose_name_plural = 'Разделы'
+
 
 class Material(models.Model):
     title = models.CharField(max_length=255, verbose_name='Наименование материала')
@@ -19,6 +23,12 @@ class Material(models.Model):
     text = models.TextField(verbose_name='Содержание')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='materials',
                               verbose_name='Владелец')
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='materials', **NULLABLE,
+                                verbose_name='Раздел')
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = 'Материал'
+        verbose_name_plural = 'Материалы'
