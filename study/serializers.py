@@ -9,7 +9,7 @@ class SectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Section
-        fields = ['title', 'description', 'owner']
+        fields = ['title', 'description', 'owner', 'id']
 
 
 class MaterialSerializer(serializers.ModelSerializer):
@@ -19,5 +19,5 @@ class MaterialSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Material
-        fields = ['title', 'description', 'text', 'owner', 'section']
+        fields = ['title', 'description', 'text', 'owner', 'section', 'id']
 

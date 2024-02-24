@@ -9,7 +9,7 @@ class MyTestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MyTest
-        fields = ['owner', 'material', 'title']
+        fields = ['owner', 'material', 'title', 'id']
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -19,6 +19,15 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ['text', 'mytest', 'id']
+
+
+class QuestionDetailSerializer(serializers.ModelSerializer):
+
+    mytest = serializers.CharField(source='mytest.title', read_only=True)
+
+    class Meta:
+        model = Question
+        fields = ['text', 'true_answer', 'mytest', 'id']
 
 
 class AnswerCheckSerializer(serializers.Serializer):
