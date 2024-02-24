@@ -4,6 +4,7 @@ from study.models import Material
 from src.constants import NULLABLE
 
 
+# Модель тестов
 class MyTest(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='my_tests',
                               verbose_name='Владелец')
@@ -11,13 +12,14 @@ class MyTest(models.Model):
     title = models.CharField(max_length=255, verbose_name='Заголовок теста')
 
     def __str__(self):
-        return self.title
+        return self.title  # Возвращает заголовок теста как строковое представление
 
     class Meta:
-        verbose_name = 'Мой тест'
-        verbose_name_plural = 'Мои тесты'
+        verbose_name = 'Мой тест'  # Отображаемое имя модели в единственном числе
+        verbose_name_plural = 'Мои тесты'  # Отображаемое имя модели во множественном числе
 
 
+# Модель вопросов
 class Question(models.Model):
     text = models.TextField(verbose_name='Текст вопроса и варианты ответа')
     true_answer = models.CharField(max_length=255, verbose_name='Правильный ответ')
@@ -26,11 +28,11 @@ class Question(models.Model):
 
     @property
     def owner(self):
-        return self.mytest.owner
+        return self.mytest.owner  # Возвращает владельца вопроса, который совпадает с владельцем теста
 
     def __str__(self):
-        return self.text
+        return self.text  # Возвращает текст вопроса как строковое представление
 
     class Meta:
-        verbose_name = 'Вопрос'
-        verbose_name_plural = 'Вопросы'
+        verbose_name = 'Вопрос'  # Отображаемое имя модели в единственном числе
+        verbose_name_plural = 'Вопросы'  # Отображаемое имя модели во множественном числе

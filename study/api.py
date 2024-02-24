@@ -4,7 +4,7 @@ from users.permissions import IsOwnerPermission
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from .serializers import SectionSerializer, MaterialSerializer
-from.models import Section, Material
+from .models import Section, Material
 
 
 class SectionList(generics.ListAPIView):
@@ -23,12 +23,14 @@ class SectionList(generics.ListAPIView):
     Запросы:
     - GET: Получение списка разделов пользователя.
     """
-
+    # Определение класса сериализатора для модели Section
     serializer_class = SectionSerializer
+    # Установка прав доступа для данного представления
     permission_classes = [IsAuthenticated, IsOwnerPermission]
 
+    # Метод для получения набора данных (queryset) для представления
     def get_queryset(self):
-        return Section.objects.filter(owner=self.request.user)
+        return Section.objects.filter(owner=self.request.user)  # Возвращает разделы текущего пользователю
 
 
 class SectionRetrieve(generics.RetrieveAPIView):
@@ -188,9 +190,13 @@ class MaterialCreate(generics.CreateAPIView):
     serializer_class = MaterialSerializer
     permission_classes = [IsAuthenticated]
 
+    # Метод для создания нового объекта
     def perform_create(self, serializer):
+        # Получение значения section_pk из URL-параметров
         section_pk = self.kwargs.get('section_pk')
+        # Получение объекта Section по его primary key или возврат страницы 404
         section = get_object_or_404(Section, pk=section_pk)
+        # Сохранение нового объекта с указанием владельца и раздела
         serializer.save(owner=self.request.user, section=section)
 
 

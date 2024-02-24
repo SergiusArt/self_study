@@ -20,8 +20,8 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.contrib.auth import views as auth_views
-from django.views.generic import TemplateView
 
+# Создание представления схемы API
 schema_view = get_schema_view(
    openapi.Info(
       title="API для платформы самообучения",
@@ -32,17 +32,23 @@ schema_view = get_schema_view(
       license=openapi.License(name="BSD License"),
    ),
    public=True,
-   permission_classes=[permissions.AllowAny],
+   permission_classes=[permissions.AllowAny],  # Разрешение доступа для всех пользователей
 )
 
+# Определение маршрутов URL для приложения
 urlpatterns = [
+    # Путь к схеме Swagger в формате JSON или YAML
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    # Путь к интерфейсу Swagger UI
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    # Путь к интерфейсу Redoc
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-
+    # Путь к административной панели Django
     path('admin/', admin.site.urls),
+    # Пути для приложений пользователей, обучения и тестов
     path('users/', include('users.urls', namespace='users')),
     path('study/', include('study.urls', namespace='study')),
     path('tests/', include('my_tests.urls', namespace='tests')),
+    # Путь к странице входа в аккаунт
     path('accounts/login/', auth_views.LoginView.as_view()),
 ]
