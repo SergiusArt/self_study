@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 
 from study.models import Material
 from users.permissions import IsOwnerPermission
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from .serializers import QuestionSerializer, MyTestSerializer, AnswerCheckSerializer, QuestionDetailSerializer
 from .models import MyTest, Question
@@ -26,10 +26,14 @@ class MyTestList(generics.ListAPIView):
     - GET: Получение списка тестов пользователя.
     """
 
+    # Определение класса сериализатора для модели MyTest
     serializer_class = MyTestSerializer
+    # Установка прав доступа для данного представления
     permission_classes = [IsAuthenticated, IsOwnerPermission]
 
+    # Метод для получения набора данных (queryset) для представления
     def get_queryset(self):
+        # Возвращает только тесты, принадлежащие текущему пользователю
         return MyTest.objects.filter(owner=self.request.user)
 
 
@@ -73,9 +77,13 @@ class MyTestCreate(generics.CreateAPIView):
     serializer_class = MyTestSerializer
     permission_classes = [IsAuthenticated, IsOwnerPermission]
 
+    # Метод для создания нового объекта
     def perform_create(self, serializer):
+        # Получение значения material_pk из URL-параметров
         material_pk = self.kwargs.get('material_pk')
+        # Получение объекта Material по его primary key
         material = get_object_or_404(Material, pk=material_pk)
+        # Сохранение нового объекта с указанием владельца и материала
         serializer.save(owner=self.request.user, material=material)
 
 
@@ -186,11 +194,16 @@ class QuestionCreate(generics.CreateAPIView):
     serializer_class = QuestionDetailSerializer
     permission_classes = [IsAuthenticated, IsOwnerPermission]
 
+    # Метод для создания нового объекта
     def perform_create(self, serializer):
+        # Получение значения test_pk из URL-параметров
         test_pk = self.kwargs.get('test_pk')
+        # Получение объекта MyTest по его primary key или возврат страницы 404
         mytest = get_object_or_404(MyTest, pk=test_pk)
+        # Извлечение текста вопроса и правильного ответа из данных сериализатора
         text = serializer.validated_data['text']
         true_answer = serializer.validated_data['true_answer']
+        # Сохранение нового объекта вопроса с указанием теста, текста вопроса и правильного ответа
         serializer.save(mytest=mytest, text=text, true_answer=true_answer)
 
 
@@ -251,13 +264,17 @@ class AnswerCheckAPI(generics.GenericAPIView):
     serializer_class = AnswerCheckSerializer
     permission_classes = [IsAuthenticated, IsOwnerPermission]
 
+    # Метод для обработки POST-запроса
     def post(self, request, *args, **kwargs):
+        # Получение идентификатора вопроса из URL-параметров
         question_id = self.kwargs.get('question_id')
+        # Получение объекта вопроса по его идентификатору
         question = Question.objects.get(id=question_id)
-
+        # Создание объекта сериализатора с передачей данных запроса и контекста с объектом вопроса
         serializer = self.get_serializer(data=request.data, context={'question': question})
+        # Проверка валидности данных сериализатора, иначе возбуждение исключения
         serializer.is_valid(raise_exception=True)
-
+        # Извлечение валидированных данных из сериализатора
         response_data = serializer.validated_data
-
+        # Возврат ответа с валидированными данными
         return Response(response_data)

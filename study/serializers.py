@@ -1,23 +1,23 @@
 from rest_framework import serializers
 from study.models import Section, Material
-from users.models import User
 
 
+# Сериализатор для модели Section
 class SectionSerializer(serializers.ModelSerializer):
 
-    owner = serializers.EmailField(source='owner.email', read_only=True)
+    owner = serializers.EmailField(source='owner.email', read_only=True)  # Поле для электронной почты владельца
 
     class Meta:
-        model = Section
-        fields = ['title', 'description', 'owner', 'id']
+        model = Section  # Используемая модель
+        fields = ['title', 'description', 'owner', 'id']  # Поля для сериализации
 
 
+# Сериализатор для модели Material
 class MaterialSerializer(serializers.ModelSerializer):
 
-    section = serializers.CharField(source='section.title', read_only=True)
-    owner = serializers.EmailField(source='owner.email', read_only=True)
+    section = serializers.CharField(source='section.title', read_only=True)  # Поле для названия раздела
+    owner = serializers.EmailField(source='owner.email', read_only=True)   # Поле для электронной почты владельца
 
     class Meta:
-        model = Material
-        fields = ['title', 'description', 'text', 'owner', 'section', 'id']
-
+        model = Material  # Используемая модель
+        fields = ['title', 'description', 'text', 'owner', 'section', 'id']  # Поля для сериализации
