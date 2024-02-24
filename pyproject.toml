@@ -20,6 +20,7 @@ requests = "^2.31.0"
 djangorestframework-simplejwt = "^5.3.1"
 setuptools = "^69.1.0"
 django-filter = "^23.5"
+coverage = "^7.4.3"
 
 
 [build-system]

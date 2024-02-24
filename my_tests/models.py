@@ -24,6 +24,10 @@ class Question(models.Model):
     mytest = models.ForeignKey(MyTest, on_delete=models.CASCADE, related_name='questions', **NULLABLE,
                                verbose_name='Мой тест')
 
+    @property
+    def owner(self):
+        return self.mytest.owner
+
     def __str__(self):
         return self.text
 
