@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from study.models import Material
 from users.permissions import IsOwnerPermission
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
+from rest_framework import generics, filters
 from .serializers import QuestionSerializer, MyTestSerializer, AnswerCheckSerializer, QuestionDetailSerializer
 from .models import MyTest, Question
 from rest_framework.response import Response
@@ -30,6 +30,9 @@ class MyTestList(generics.ListAPIView):
     serializer_class = MyTestSerializer
     # Установка прав доступа для данного представления
     permission_classes = [IsAuthenticated, IsOwnerPermission]
+    # Установка фильтрации
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['title']
 
     # Метод для получения набора данных (queryset) для представления
     def get_queryset(self):
@@ -147,6 +150,9 @@ class QuestionList(generics.ListAPIView):
     serializer_class = QuestionSerializer
     permission_classes = [IsAuthenticated, IsOwnerPermission]
     queryset = Question.objects.all()
+    # Установка фильтрации
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['mytest']
 
     def get_queryset(self):
         # Получить все вопросы, относящиеся к тестам владельца (пользователя)
