@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 
 from users.permissions import IsOwnerPermission
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
+from rest_framework import generics, filters
 from .serializers import SectionSerializer, MaterialSerializer
 from .models import Section, Material
 
@@ -27,6 +27,9 @@ class SectionList(generics.ListAPIView):
     serializer_class = SectionSerializer
     # Установка прав доступа для данного представления
     permission_classes = [IsAuthenticated, IsOwnerPermission]
+    # Установка фильтрации
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['title']
 
     # Метод для получения набора данных (queryset) для представления
     def get_queryset(self):
@@ -141,6 +144,10 @@ class MaterialList(generics.ListAPIView):
 
     serializer_class = MaterialSerializer
     permission_classes = [IsAuthenticated, IsOwnerPermission]
+
+    # Установка фильтрации
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['title']
 
     def get_queryset(self):
         return Material.objects.filter(owner=self.request.user)

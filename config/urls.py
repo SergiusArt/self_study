@@ -23,16 +23,16 @@ from django.contrib.auth import views as auth_views
 
 # Создание представления схемы API
 schema_view = get_schema_view(
-   openapi.Info(
-      title="API для платформы самообучения",
-      default_version='v1',
-      description="Здесь можно протестировать API для платформы самообучения",
-      terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@snippets.local"),
-      license=openapi.License(name="BSD License"),
-   ),
-   public=True,
-   permission_classes=[permissions.AllowAny],  # Разрешение доступа для всех пользователей
+    openapi.Info(
+        title="API для платформы самообучения",
+        default_version='v1',
+        description="Здесь можно протестировать API для платформы самообучения",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@snippets.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],  # Разрешение доступа для всех пользователей
 )
 
 # Определение маршрутов URL для приложения
